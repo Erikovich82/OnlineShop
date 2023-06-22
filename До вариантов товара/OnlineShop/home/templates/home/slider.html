@@ -1,0 +1,30 @@
+{% load static %}
+<!-- HOME -->
+	<div id="home">
+		<!-- container -->
+		<div class="container">
+			<!-- home wrap -->
+			<div class="home-wrap">
+				<!-- home slick -->
+				<div id="home-slick">
+
+					{% for product in product_slider %}
+						<!-- banner -->
+						<div class="banner banner-1">
+							<img src="{{ product.image.url }}" alt="" style="width:300px; height:450px;">
+							<div class="banner-caption text-center">
+								<h1> {{ product.title }}</h1>
+								<h3> {{ product.price }} ₸</h3>
+								<a href="product/{{ product.id }}/{{ product.slug }}" class="primary-btn">Shop Now</a>
+							</div>
+						</div>
+						<!-- /banner -->
+					{% endfor %}
+				</div>
+				<!-- /home slick -->
+			</div>
+			<!-- /home wrap -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /HOME -->

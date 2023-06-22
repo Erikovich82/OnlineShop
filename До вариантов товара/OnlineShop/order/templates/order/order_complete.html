@@ -1,0 +1,41 @@
+{% extends 'home/homebase.html' %}
+{% load static %}
+{% block title %} Order complete{% endblock %}
+{% block description %} {{ setting.description }}{% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active">Order complete</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+			<h3> Order completed</h3> <br>
+				<h2> Dear {{ user.first_name }} {{ user.last_name }}</h2>
+				<h2> your order is completed</h2>
+				<h2> Order code: {{ ordercode }}</h2>
+				<h2> Thank you!</h2>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+{% endblock %}
+
+{% block foot %} {% include 'home/footer.html' %} {% endblock %}
+

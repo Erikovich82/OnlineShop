@@ -1,0 +1,60 @@
+{% extends 'home/homebase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} Sign Up {% endblock %}
+{% block description %} {{ setting.description }}{% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active"> Sign Up</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+<!-- section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="col-md-12">
+            <div class="billing-details">
+
+                <div class="section-title">
+                    <h3 class="title"> Sign Up Form</h3>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{message.tags}}" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" class="registration_form">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <span> {{ error }}</span>
+                    <input class="primary-btn add-to-cart" type="submit" value="Sign Up">
+                </form>
+
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /section -->
+{% endblock %}
+
+{% block foot %} {% include 'home/footer.html' %} {% endblock %}
+

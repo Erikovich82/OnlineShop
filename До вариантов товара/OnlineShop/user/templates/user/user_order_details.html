@@ -1,0 +1,109 @@
+{% extends 'home/homebase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} Order #{{ order.code }}  {% endblock %}
+{% block description %} {{ setting.description }}{% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active"> Order #{{ order.code }}  </li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+		<!-- section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="col-md-3">
+            {% include "user/user_panel.html" %}
+        </div>
+        <div class="col-md-9">
+            <div class="billing-details">
+                <div class="section-title">
+                    <h3 class="title">  Order code: {{ order.code }} </h3>
+                </div>
+            </div>
+            <table class="shopping-cart-table table">
+                <tr>
+                    <th class="text-left">Name Surname</th>
+                    <td class="text-left">{{ order.first_name }} {{ order.last_name }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left">Phone</th>
+                    <td class="text-left">{{ order.phone }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left">Address</th>
+                    <td class="text-left">{{ order.address }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left">City</th>
+                    <td class="text-left">{{ order.city }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left">Country</th>
+                    <td class="text-left">{{ order.country }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left">Status</th>
+                    <td class="text-left">{{ order.status }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left">Date</th>
+                    <td class="text-left">{{ order.create_at }}</td>
+                </tr>
+            </table>
+            <!-- /row -->
+               <div class="billing-details">
+                <div class="section-title">
+                    <h3 class="title">  Order item list </h3>
+                </div>
+            </div>
+           <table class="shopping-cart-table table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Product name</th>
+                <th class="text-center">Price</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-center"> Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in orderitems %}
+            <tr>
+                <td class="thumb"><img src="{{ p.product.image.url }}" alt=""
+                                       style="height: 70px; width: auto;"></td>
+                <td class="details">
+                    <a href="/product/{{ p.product.id }}/{{ p.product.slug }}"> {{ p.product.title }}</a>
+                </td>
+                <td class="price text-center"><strong> ₸{{ p.product.price }}</strong><br>
+                    <del class="font-weak"><small>₸{{ p.product.price|add:50000 }}.00</small></del>
+                </td>
+                <td class="qty text-center"><p> {{ p.quantity }} </p></td>
+                <td class="qty text-center"><p> {{ p.amount }} </p></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+    <!-- /container -->
+
+</div>
+<!-- /section -->
+{% endblock %}
+
+{% block foot %} {% include 'home/footer.html' %} {% endblock %}
+

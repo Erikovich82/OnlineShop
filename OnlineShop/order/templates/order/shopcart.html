@@ -1,0 +1,109 @@
+{% extends 'home/homebase.html' %}
+{% load static %}
+{% carrency %}
+{% block title %} Shopcart {% endblock %}
+{% block description %} {{ setting.description }}{% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+{% block body %}
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active"> Shopcart </li>
+
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<!-- MAIN -->
+				<div id="main" class="col-md-12">
+					<div class="col-md-12">
+						<div class="order-summary clearfix">
+							<div class="section-title">
+								<h3 class="title"> Shopcart </h3>
+							</div>
+							<table class="shopping-cart-table table">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Product name</th>
+										<th class="text-center">Price</th>
+										<th class="text-center">Quantity</th>
+										<th class="text-right"></th>
+									</tr>
+								</thead>
+								<tbody>
+                       				{% for p in shopcart %}
+                                    {% if p.variant == None %}
+                                    <tr>
+                                        <td class="thumb"><img src="{{ p.product.image.url }}" alt="" style="height: 70px; width: auto;"></td>
+                                        <td class="details">
+                                        <a href="/product/{{ p.product.id }}/{{ p.product.slug }}"> {{ p.product.title }}</a>
+                                        </td>
+                                        <td class="price text-center"><strong> {{ p.product.price|currency:request.session.currency }} {{ request.session.currency }}</strong><br><del class="font-weak"><small>₸{{ p.product.price|add:50000|currency:request.session.currency }}.00</small></del></td>
+                                        <td class="qty text-center"><input class="input" type="number" value="{{ p.quantity }}" min="1"></td>
+                                        <td class="text-right"> <a class="main-btn icon-btn" href="/order/deletefromcart/{{ p.id }}"
+                                        onclick="return confirm('Are you sure want to delete {{ p.product.title }} from shopcart?')"><i class="fa fa-close"></i></a></td>
+                                    </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td class="thumb"><img src="{{ p.variant.image }}" alt="" style="height: 70px; width: auto;"></td>
+                                            <td class="details">
+                                                <a href="/product/{{ p.product.id }}/{{ p.product.slug }}"> {{ p.variant.title }}</a>
+                                            </td>
+                                            <td class="price text-center"><strong> {{ p.variant.price|currency:request.session.currency }} {{ request.session.currency }}</strong><br><del class="font-weak"><small>{{ p.variant.price|add:50000|currency:request.session.currency }}.00</small></del></td>
+                                            <td class="qty text-center"><input class="input" type="number" value="{{ p.quantity }}" min="1"></td>
+                                            <td class="text-right"> <a class="main-btn icon-btn" href="/order/deletefromcart/{{ p.id }}"
+                                            onclick="return confirm('Are you sure want to delete {{ p.product.title }} from shopcart?')"><i class="fa fa-close"></i></a></td>
+                                        </tr>
+
+                                    {% endif %}
+                                    {% endfor %}
+								</tbody>
+								<tfoot>
+									<tr>
+										<th class="empty" colspan="3"></th>
+										<th>SUBTOTAL</th>
+										<th colspan="2" class="sub-total"> {{ total|currency:request.session.currency }} {{ request.session.currency }}</th>
+									</tr>
+									<tr>
+										<th class="empty" colspan="3"></th>
+										<th>SHIPING</th>
+										<td colspan="2">Free Shipping</td>
+									</tr>
+									<tr>
+										<th class="empty" colspan="3"></th>
+										<th>TOTAL</th>
+										<th colspan="2" class="total"> {{ total|currency:request.session.currency }} {{request.session.currency }}</th>
+									</tr>
+								</tfoot>
+							</table>
+							<div class="pull-right">
+								<a href="/order/orderproduct/" class="primary-btn">Place Order</a>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+				<!-- /MAIN -->
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+{% endblock %}
+
+{% block foot %} {% include 'home/footer.html' %} {% endblock %}
+

@@ -1,0 +1,59 @@
+{% extends 'home/homebase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} Update profile {% endblock %}
+{% block description %} {{ setting.description }}{% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active"> Update profile </li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+		<!-- section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="col-md-3">
+            {% include "user/user_panel.html" %}
+        </div>
+        <div class="col-md-9">
+            <div class="billing-details">
+                <div class="section-title">
+                    <h3 class="title">  Update your info:</h3>
+                </div>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ user_form.username|as_crispy_field }}
+                {{ user_form.first_name|as_crispy_field }}
+                {{ user_form.last_name|as_crispy_field }}
+                {{ user_form.email|as_crispy_field }}
+
+                {{ profile_form|crispy }}
+
+                <br>
+                <input class="primary-btn add-to-cart" type="submit" value="Save changes">
+            </form>
+            <!-- /row -->
+        </div>
+
+    </div>
+    <!-- /container -->
+
+</div>
+<!-- /section -->
+{% endblock %}
+
+{% block foot %} {% include 'home/footer.html' %} {% endblock %}
+

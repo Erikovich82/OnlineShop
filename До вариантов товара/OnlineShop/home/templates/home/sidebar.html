@@ -1,0 +1,60 @@
+{% load static %}
+{% load mptt_tags %}
+<!-- NAVIGATION -->
+	<div id="navigation">
+		<!-- container -->
+		<div class="container">
+			<div id="responsive-nav">
+				<!-- category nav -->
+				{% if request.path == '/' %}
+				<div class="category-nav">
+				{% else %}
+				<div class="category-nav show-on-click">
+				{% endif %}
+					<span class="category-header">Categories <i class="fa fa-list"></i></span>
+					<ul class="category-list">
+						{% recursetree category %}
+						<li class="dropdown side-dropdown">
+						{% if node.is_leaf_node %}
+							<li><a href="/category/{{ node.id }}/{{ node.slug }}">{{ node.title }}</a></li>
+						{% else %}
+							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> {{ node.title }} <i class="fa fa-angle-right"></i></a>
+							<div class="custom-menu">
+								<div class="row">
+									<div class="col-md-4">
+										{% if not node.is_leaf_node %}
+										<ul class="list-links">
+											<li>
+												<h3 class="list-links-title"> <a href="/category/{{ node.id }}/{{ node.slug }}">{{ node.title }} </a></h3></li>
+											<li>
+												<ul class="children">{{ children }} </ul>
+												</li>
+										</ul>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</li>
+						{% endif %}
+					    {% endrecursetree %}
+					</ul>
+				</div>
+				<!-- /category nav -->
+
+				<!-- menu nav -->
+				<div class="menu-nav">
+					<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
+					<ul class="menu-list">
+						<li><a href="/admin/">Admin</a></li>
+						<li><a href="/">Home</a></li>
+						<li><a href="#">Shop</a></li>
+						<li><a href="{% url 'contacts' %}">Contacts</a></li>
+						<li><a href="{% url 'aboutus' %}">About Us</a></li>
+					</ul>
+				</div>
+				<!-- menu nav -->
+			</div>
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /NAVIGATION -->
