@@ -1,0 +1,79 @@
+{% extends 'home/homebase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} My products  {% endblock %}
+{% block description %} {{ setting.description }}{% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="{% url 'myaccount' %}">My profile</a></li>
+                <li class="active"> My products  </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /BREADCRUMB -->
+
+        <!-- section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="col-md-3">
+            {% include "user/user_panel.html" %}
+        </div>
+        <div class="col-md-9">
+            <!-- /row -->
+           <div class="billing-details">
+                <div class="section-title">
+                    <h3 class="title"> My products </h3>
+                </div>
+            </div>
+           <table class="shopping-cart-table table">
+            <thead>
+            <tr>
+                <th></th>
+                <th> Product name</th>
+                <th class="text-center">Price</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-center"> Amount</th>
+                <th class="text-center"> Link </th>
+                <th class="text-center"> Date </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in order_products %}
+            <tr>
+                <td class="thumb"><img src="{{ p.product.image.url }}" alt=""
+                                       style="height: 70px; width: auto;"></td>
+                <td class="details">
+                    <a href="/product/{{ p.product.id }}/{{ p.product.slug }}"> {{ p.product.title }}</a>
+                </td>
+                <td class="price text-center"><strong> ₸{{ p.product.price }}</strong><br>
+                    <del class="font-weak"><small>₸{{ p.product.price|add:50000 }}.00</small></del>
+                </td>
+                <td class="qty text-center"><p> {{ p.quantity }} </p></td>
+                <td class="qty text-center"><p> {{ p.amount }} </p></td>
+                <td class="qty text-center"><a class="primary-btn" href="/user/orderdetail/{{  p.order.id }}"> {{ p.order.code }}  </a></td>
+                <td class="qty text-center"><p> {{ p.order.create_at }} </p></td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+    <!-- /container -->
+
+</div>
+<!-- /section -->
+{% endblock %}
+
+{% block foot %} {% include 'home/footer.html' %} {% endblock %}

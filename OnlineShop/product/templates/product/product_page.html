@@ -1,0 +1,301 @@
+{% extends 'home/homebase.html' %}
+{% load static %}
+{% load carrency %}
+{% block title %} {{ product.title }} - {{ setting.title }} {% endblock %}
+{% block description %} {{ product.description }} {% endblock %}
+{% block keywords %} {{ product.keywords }} {% endblock %}
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+{% block body %}
+<!-- BREADCRUMB -->
+<div id="breadcrumb">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/category/{{ product.category.id }}/{{ product.category.slug }}">{{ product.category }}</a>
+            </li>
+            <li class="active">{{ product.title }}</li>
+        </ul>
+    </div>
+</div>
+<!-- /BREADCRUMB -->
+
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!--  Product Details -->
+            <div class="product product-details clearfix">
+                <div class="col-md-6">
+                    <div id="product-main-view">
+                        <div class="product-view">
+                            <img src="{{ product.image.url }}" alt="" style="height:500px;width:auto;">
+                        </div>
+                        {% for i in images %}
+                        <div class="product-view">
+                            <img src="{{ i.image.url }}" alt=""  style="height:500px;width:auto;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div id="product-view">
+                        <div class="product-view">
+                            <img src="{{ product.image.url }}" alt="">
+                        </div>
+                        {% for i in images %}
+                        <div class="product-view">
+                            <img src="{{ i.image.url }}" alt="">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="product-body">
+                        <div class="product-label">
+                            <span>New</span>
+                            <span class="sale">-13%</span>
+                        </div>
+                        <h2 class="product-name">{{ product.title }}</h2>
+                        <h3 class="product-price">₸{{ product.price }}
+                            <del class="product-old-price">₸{{ product.price|add:"50000" }}</del>
+                        </h3>
+                        <div>
+                            <div class="product-rating">
+                                <i class="fa fa-star{% if product.average_review < 1 %}-o empty {% endif %}"></i>
+                                <i class="fa fa-star{% if product.average_review < 2 %}-o empty {% endif %}"></i>
+                                <i class="fa fa-star{% if product.average_review < 3 %}-o empty {% endif %}"></i>
+                                <i class="fa fa-star{% if product.average_review < 4 %}-o empty {% endif %}"></i>
+                                <i class="fa fa-star{% if product.average_review < 5 %}-o empty {% endif %}"></i>
+                                {{ product.average_review|stringformat:".2f"}}
+                            </div>
+                            <a href="#tab1">{{ product.count_review }} Review(s) / Add Review</a>
+                        </div>
+                        <p>{{ product.description }}</p>
+
+
+
+                       <script type="text/javascript">
+                                  $(function () {
+                                  $('.configuration').hide();
+                                  $('#d0').show();
+
+                                  $('#conf_select').on("change",function () {
+                                  $('.configuration').hide();
+                                  $('#d'+$(this).val()).show();
+                                  $variantid = explode('_',$_POST['conf_select']);
+                                  }).val("0");
+                                });
+
+                        </script>
+
+
+
+                        <div class="product-btns">
+                           {% if product.variant == 'Size-Color'  %}
+                                     <form action="/order/addtoshopcart/{{ product.id }}" method="POST" id="post-form">
+                                        {% csrf_token %}
+
+                                            <select id="conf_select" name="conf_select">
+                                            <option value="0" selected >Choose configuration</option>
+                                                        {% for s in sizes %}
+                                                            {% for c in colors %}
+                                                                {% if c.size == s %}
+                                                                <option value="{{ forloop.counter }}">{{ s }} {{ c.color }} </option>
+                                                             {% endif %}
+                                                         {% endfor %}
+                                                      {% endfor %}
+                                            </select>
+
+                                             {% for s in sizes %}
+                                                {% for c in colors %}
+                                                    {% if c.size == s %}
+                                                    <div  id="d{{ forloop.counter }}" class="configuration">
+                                                           <p><strong>Availability:</strong> {% if c.quantity > 0  %} In Stock {% else %} Out of Stock {% endif %}</p>
+                                                           <p><strong>Selected :</strong> Size : {{ c.size }}  Color : {{ c.color }} </p>
+                                                           <h3 class="product-price" id="{{ c.color }}">₸{{ c.price }}</h3>
+                                                           <img src="{{c.image}}" id="{{ c.color }}" style="height:200px">
+                                                    </div>
+                                                 {% endif %}
+                                             {% endfor %}
+                                            {% endfor %}
+                                             <br>
+                                             <br>
+                                         {% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" role="alert">
+                                            {{ message }}
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <div id="SelectedProduct">
+                                            <div class="qty-input">
+                                                <span class="text-uppercase">QTY: </span>
+                                                <input class="input" name="quantity" type="number" value="1" min="1" max="{{ с.quantity }}">
+                                                <button type="submit" class="primary-btn add-to-cart">
+                                                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            {% elif product.variant == 'Size' %}
+                                       <form method="POST" id="post-form">
+                                        {% csrf_token %}
+                                            <select id="conf_select" name="cd-dropdown" >
+                                            <option value="0" selected >Choose configuration</option>
+                                                    {% for s in sizes %}
+                                                        <option value="{{ forloop.counter }}">{{ c.size }} </option>
+                                                     {% endfor %}
+                                            </select>
+
+                                             {% for s in sizes %}
+                                                    <div  id="d{{ forloop.counter }}" class="configuration">
+                                                           <p><strong>Availability:</strong> {% if s.quantity > 0  %} In Stock {% else %} Out of Stock {% endif %}</p>
+                                                           <p><strong>Selected :</strong> Size : {{ s.size }} </p>
+                                                           <h3 class="product-price" id="{{ s.size }}">₸{{ c.price }}</h3>
+                                                           <img src="{{ s.image }}" id="{{ s.size }}" style="height:200px">
+                                                    </div>
+
+                                             {% endfor %}
+                                             <br>
+                                             <br>
+                                           <div id="SelectedProduct">
+                                            <div class="qty-input">
+                                                <span class="text-uppercase">QTY: </span>
+                                                <input class="input" name="quantity" type="number" value="1" min="1" max="{{ с.quantity }}">
+                                                <button type="submit" class="primary-btn add-to-cart">
+                                                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    {% elif product.variant == 'Color' %}
+                                    <form method="POST" id="post-form">
+                                        <input type="hidden" name="productid" id="productid" value="{{ product.id }}">
+                                        {% csrf_token %}
+                                            <select id="conf_select" name="cd-dropdown" >
+                                            <option value="0" selected >Choose configuration</option>
+                                                    {% for c in colors %}
+                                                        <option value="{{ forloop.counter }}">{{ c.color }} </option>
+                                                  {% endfor %}
+                                            </select>
+                                             {% for c in colors %}
+                                                    <div  id="d{{ forloop.counter }}" class="configuration">
+                                                           <p><strong>Availability:</strong> {% if c.quantity > 0  %} In Stock {% else %} Out of Stock {% endif %}</p>
+                                                           <p><strong>Selected :</strong> Color : {{ c.color }} </p>
+                                                           <h3 class="product-price" id="{{ c.color }}">₸{{ c.price }}</h3>
+                                                           <img src="{{ c.image }}" id="{{ c.color }}" style="height:200px">
+                                                    </div>
+                                            {% endfor %}
+                                             <br>
+                                             <br>
+                                           <div id="SelectedProduct">
+                                            <div class="qty-input">
+                                                <span class="text-uppercase">QTY: </span>
+                                                <input class="input" name="quantity" type="number" value="1" min="1" max="{{ с.quantity }}">
+                                                <button type="submit" class="primary-btn add-to-cart">
+                                                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                     </form>
+                                </div>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="product-tab">
+                        <ul class="tab-nav">
+                            <li class="active"><a data-toggle="tab" href="#tab1">Details</a></li>
+                            <li><a data-toggle="tab" href="#tab2">Reviews ({{ comments|length }})</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab1" class="tab-pane fade in active">
+                                <p>{{ product.detail | safe }}</p>
+                            </div>
+                            <div id="tab2" class="tab-pane fade in">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="product-reviews">
+                                            {% for c in comments %}
+                                            <div class="single-review">
+                                                <div class="review-heading">
+                                                    <div><i class="fa fa-user-o"></i> {{ c.user }}</div>
+                                                    <div><b><i class="fa fa-user-o"></i> {{ c.subject }}</b></div>
+                                                    <div><i class="fa fa-clock-o"></i> {{ c.create_at }}</div>
+                                                    <div class="review-rating pull-right">
+                                                        <i class="fa fa-star{% if c.rate < 1 %}-o empty {% endif %}"></i>
+                                                        <i class="fa fa-star{% if c.rate < 2 %}-o empty {% endif %}"></i>
+                                                        <i class="fa fa-star{% if c.rate < 3 %}-o empty {% endif %}"></i>
+                                                        <i class="fa fa-star{% if c.rate < 4 %}-o empty {% endif %}"></i>
+                                                        <i class="fa fa-star{% if c.rate < 5 %}-o empty {% endif %}"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="review-body"> <p>{{ c.comment }}</p>  </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" role="alert">
+                                            {{ message }}
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <h4 class="text-uppercase">Write Your Review</h4>
+                                        <form class="review-form" action="/product/addcomment/{{ product.id }}"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <input name="subject" class="input" type="text"
+                                                       placeholder="Your subject"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea name="comment" class="input"
+                                                          placeholder="Your review"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-rating">
+                                                    <strong class="text-uppercase">Your Rating: </strong>
+                                                    <div class="stars">
+                                                        <input type="radio" id="star5" name="rate" value="5"/><label
+                                                            for="star5"></label>
+                                                        <input type="radio" id="star4" name="rate" value="4"/><label
+                                                            for="star4"></label>
+                                                        <input type="radio" id="star3" name="rate" value="3"/><label
+                                                            for="star3"></label>
+                                                        <input type="radio" id="star2" name="rate" value="2"/><label
+                                                            for="star2"></label>
+                                                        <input type="radio" id="star1" name="rate" value="1"/><label
+                                                            for="star1"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if user.id is None %}
+                                            <h3> Only authorized user can review </h3>
+                                            {% else %}
+                                            <button class="primary-btn">Submit</button>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /Product Details -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /section -->
+{% endblock %}
+{% block foot %} {% include 'home/footer.html' %} {% endblock %}
